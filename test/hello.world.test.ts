@@ -13,3 +13,10 @@ describe("should hello", () => {
         }, 1000);
     });
 });
+
+describe("should hello", () => {
+    it("world", () => {
+        const systemRunner = new SystemRunner();
+        systemRunner.init();
+    });
+});

@@ -5,8 +5,10 @@ import {Entity} from "./Entity";
 import {ChainedEntityListener} from "./listeners/ChainedEntityListener";
 import {SystemListener} from "./listeners/SystemListener";
 import {State} from "./State";
+import {ConsoleRenderSystem} from "./systems/ConsoleRenderSystem";
 import {FireSystem} from "./systems/FireSystem";
 import {System} from "./systems/System";
+import {hasComponent} from "./Util";
 
 export class SystemRunner {
 
@@ -15,48 +17,48 @@ export class SystemRunner {
 
     public init() {
         const system = new FireSystem();
+        const renderSystem = new ConsoleRenderSystem();
         this.state.listeners = [
-          new ChainedEntityListener(
+            new ChainedEntityListener(new SystemListener(renderSystem),
+                (e) => hasComponent(e, c => c instanceof CoordinateComponent)),
+            new ChainedEntityListener(
               new SystemListener(system),
-              (e) => e.listComponents().some(c => c instanceof FlammableComponent || c instanceof OnFireComponent)
-                  &&
-                  e.listComponents().some(c => c instanceof CoordinateComponent)
-              ),
+              (e) => hasComponent(e, c => c instanceof FlammableComponent || c instanceof OnFireComponent)
+                  && hasComponent(e, c => c instanceof CoordinateComponent)),
         ];
 
-        const entity = new Entity();
-        entity.addComponent(new OnFireComponent());
-        entity.addComponent(new CoordinateComponent());
+        const createEntity = (x: number, y: number) => {
+            const ent = new Entity();
+            ent.addComponent(new FlammableComponent());
+            const coordinateComponent = new CoordinateComponent();
+            ent.addComponent(coordinateComponent);
+            coordinateComponent.getConfiguration().x = x;
+            coordinateComponent.getConfiguration().y = y;
+            this.state.add(ent);
+        };
 
-        const entity2 = new Entity();
-        entity2.addComponent(new FlammableComponent());
+        const ent1 = new Entity();
+        ent1.addComponent(new OnFireComponent());
         const coordinateComponent1 = new CoordinateComponent();
-        coordinateComponent1.getConfiguration().x = 5;
-        entity2.addComponent(coordinateComponent1);
+        ent1.addComponent(coordinateComponent1);
+        ent1.addComponent(new OnFireComponent());
+        this.state.add(ent1);
 
-        const entity3 = new Entity();
-        entity3.addComponent(new FlammableComponent());
-        const coordinateComponent2 = new CoordinateComponent();
-        coordinateComponent2.getConfiguration().x = 14;
-        entity3.addComponent(coordinateComponent2);
+        Array(100).fill("").forEach(i => {
+            createEntity(~~(Math.random() * 100), ~~(Math.random() * 40));
+        });
 
-        const entity4 = new Entity();
-        entity4.addComponent(new FlammableComponent());
-        const coordinateComponent3 = new CoordinateComponent();
-        coordinateComponent3.getConfiguration().x = 45;
-        entity4.addComponent(coordinateComponent3);
+        this.systems.push(renderSystem);
 
+        setTimeout(() => {
+            this.systems.push(system);
+        }, 2000);
 
-        this.state.add(entity);
-        this.state.add(entity2);
-        this.state.add(entity3);
-        this.state.add(entity4);
-        this.systems.push(system);
     }
 
     public run() {
         setInterval(() => {
             this.systems.forEach(sys => sys.step(this.state));
-        }, 0, 30);
+        }, 1000);
     }
 }

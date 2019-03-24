@@ -1,27 +1,34 @@
 import {Component} from "../components/base/Component";
 import {CoordinateComponent} from "../components/CoordinateComponent";
+import {CoordinateComponentConfiguration} from "../components/CoordinateComponent.configuration";
 import {FlammableComponent} from "../components/FlammableComponent";
 import {OnFireComponent} from "../components/OnFireComponent";
 import {Entity} from "../Entity";
 import {State} from "../State";
+import {filterByCriteria, findComponent} from "../Util";
 import {System} from "./System";
 
 export class FireSystem extends System {
 
-    public step(state: State): void {
-        const flammable = this.entities.filter(x => x.listComponents().some(c => c instanceof FlammableComponent));
-        const onfire = this.entities.filter(x => x.listComponents().some(c => c instanceof OnFireComponent));
+    public findIt(e: Entity, l: (c: Component<any>) => boolean) {
+        return e.listComponents().find(l);
+    }
 
-        const getCoords = (entity: Entity) => entity.listComponents().find(c => c instanceof CoordinateComponent) as CoordinateComponent;
+    public step(state: State): void {
+
+        const flammable = filterByCriteria(this.entities, c => c instanceof FlammableComponent);
+        const onfire = filterByCriteria(this.entities, c => c instanceof OnFireComponent);
+
+        const dist = (a: CoordinateComponentConfiguration, b: CoordinateComponentConfiguration) => Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
 
         flammable.forEach(flammableEntity => {
-            const coords: CoordinateComponent = getCoords(flammableEntity);
+            const coords = findComponent(flammableEntity, c => c instanceof CoordinateComponent);
             onfire.forEach(onfireEntity => {
-               const fireCoords = getCoords(onfireEntity);
-               if (Math.abs(coords.getConfiguration().x - fireCoords.getConfiguration().x) < 10) {
-                    state.removeComponent(flammableEntity, flammableEntity.listComponents().find(c => c instanceof FlammableComponent) as Component<any>);
+               const fireCoords = findComponent(onfireEntity, c => c instanceof CoordinateComponent);
+                // @ts-ignore
+                if (dist(coords.getConfiguration(), fireCoords.getConfiguration()) < 10) {
+                    state.removeComponent(flammableEntity, findComponent(flammableEntity, c => c instanceof FlammableComponent) as FlammableComponent);
                     state.addComponent(flammableEntity, new OnFireComponent());
-                    console.log("On Fire!", flammableEntity);
                }
             });
         });
