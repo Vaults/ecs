@@ -1,0 +1,25 @@
+{
+  "name": "ecs",
+  "version": "1.0.0",
+  "description": "Simple typescript ecs implementation",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha -r ts-node/register"
+  },
+  "author": "Vaults",
+  "license": "CC-BY-NC-SA-4.0",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.14.0",
+    "typescript": "^3.3.4000"
+  },
+  "dependencies": {}
+}
