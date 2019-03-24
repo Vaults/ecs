@@ -5,18 +5,23 @@ import {removeFromArray} from "./Util";
 export class Entity {
 
     public readonly ID: string = uuid.v4();
-    private components: Array<Component<any>> = [];
+    private components: {[key: string]: Component<any>} = {};
+
 
     public addComponent(c: Component<any>) {
-        this.components.push(c);
+        this.components[c.constructor.name] = c;
     }
 
-    public removeComponent(c: Component<any>) {
-        this.components = removeFromArray(this.components, c);
+    public getComponent(c: string) {
+        return this.components[c];
     }
 
-    public listComponents() {
-        // Cheap list copy
-        return this.components.map(x => x);
+    public hasComponent(c: string) {
+        return this.components[c] !== undefined;
     }
+
+    public removeComponent(c: string) {
+        delete this.components[c];
+    }
+
 }

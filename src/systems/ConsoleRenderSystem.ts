@@ -1,25 +1,24 @@
 import {CoordinateComponent} from "../components/CoordinateComponent";
 import {OnFireComponent} from "../components/OnFireComponent";
 import {State} from "../State";
-import {filterByCriteria, findComponent, hasComponent} from "../Util";
 import {System} from "./System";
 
 export class ConsoleRenderSystem extends System {
 
-    private colorMap : {[n: number]: string} = {
+    private colorMap: {[n: number]: string} = {
         0: `\x1b[48;5;255m `,
         1: `\x1b[48;5;232m `,
         2: `\x1b[48;5;196m `,
     };
 
-    step(state: State): void {
+    public step(state: State): void {
 
         const renderMap = Array(50).fill(0).map(i => Array(100).fill(0));
 
         this.entities.forEach(ent => {
-            const coords: CoordinateComponent = findComponent(ent, c => c instanceof CoordinateComponent) as CoordinateComponent;
+            const coords: CoordinateComponent = ent.getComponent(CoordinateComponent.name);
             renderMap[coords.getConfiguration().y][coords.getConfiguration().x] = 1;
-            if (hasComponent(ent, c => c instanceof OnFireComponent)) {
+            if (ent.hasComponent(OnFireComponent.name)) {
                 renderMap[coords.getConfiguration().y][coords.getConfiguration().x] = 2;
             }
         });

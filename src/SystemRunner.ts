@@ -8,7 +8,6 @@ import {State} from "./State";
 import {ConsoleRenderSystem} from "./systems/ConsoleRenderSystem";
 import {FireSystem} from "./systems/FireSystem";
 import {System} from "./systems/System";
-import {hasComponent} from "./Util";
 
 export class SystemRunner {
 
@@ -20,11 +19,11 @@ export class SystemRunner {
         const renderSystem = new ConsoleRenderSystem();
         this.state.listeners = [
             new ChainedEntityListener(new SystemListener(renderSystem),
-                (e) => hasComponent(e, c => c instanceof CoordinateComponent)),
+                (e) => e.hasComponent(CoordinateComponent.name)),
             new ChainedEntityListener(
               new SystemListener(system),
-              (e) => hasComponent(e, c => c instanceof FlammableComponent || c instanceof OnFireComponent)
-                  && hasComponent(e, c => c instanceof CoordinateComponent)),
+              (e) => (e.hasComponent(OnFireComponent.name) || e.hasComponent(FlammableComponent.name))
+                  && e.hasComponent(CoordinateComponent.name)),
         ];
 
         const createEntity = (x: number, y: number) => {
@@ -59,6 +58,6 @@ export class SystemRunner {
     public run() {
         setInterval(() => {
             this.systems.forEach(sys => sys.step(this.state));
-        }, 1000);
+        }, 17);
     }
 }

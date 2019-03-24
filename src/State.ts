@@ -20,7 +20,7 @@ export class State {
         this.listeners.forEach(listener => listener.take(e));
     }
 
-    public removeComponent(e: Entity, c: Component<any>) {
+    public removeComponent(e: Entity, c: string) {
         e.removeComponent(c);
         this.listeners.forEach(listener => listener.take(e));
     }
