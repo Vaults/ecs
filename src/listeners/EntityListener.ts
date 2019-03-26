@@ -1,6 +1,6 @@
 import {Entity} from "../Entity";
 import {System} from "../systems/System";
-import {removeFromArray} from "../Util";
+import {removeFromArray} from "../util/Util";
 
 export abstract class EntityListener {
     public entities: Entity[] = [];
@@ -11,8 +11,8 @@ export abstract class EntityListener {
         if (this.isRelevant(e)) {
             if (!this.entities.includes(e)) {
                 this.entities.push(e);
-                this.push(e);
             }
+            this.push(e);
         } else {
             this.remove(e);
         }

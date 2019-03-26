@@ -1,11 +1,11 @@
 import {Component} from "./base/Component";
 import {NullConfiguration} from "./base/NullConfiguration";
-import {CoordinateComponentConfiguration} from "./CoordinateComponent.configuration";
+import {Coordinate} from "./Coordinate";
 
-export class CoordinateComponent extends Component<CoordinateComponentConfiguration> {
+export class CoordinateComponent extends Component<Coordinate> {
 
-    public createInitialConfiguration(): CoordinateComponentConfiguration {
-        return new CoordinateComponentConfiguration(0, 0);
+    public createInitialConfiguration(): Coordinate {
+        return new Coordinate(0, 0);
     }
 
 }

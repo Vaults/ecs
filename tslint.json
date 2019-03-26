@@ -7,8 +7,9 @@
     "rules": {
         "arrow-parens": false,
         "eofline": false,
-        "interface-name": false
-
+        "interface-name": false,
+        "interface-over-type-literal": false,
+        "max-line-length": false
     },
     "rulesDirectory": []
 }

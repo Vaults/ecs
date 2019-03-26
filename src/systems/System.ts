@@ -1,6 +1,5 @@
 import {Entity} from "../Entity";
 import {State} from "../State";
-import {removeFromArray} from "../Util.js";
 
 export abstract class System {
 

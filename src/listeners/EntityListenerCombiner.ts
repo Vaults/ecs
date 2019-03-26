@@ -1,6 +1,4 @@
 import {Entity} from "../Entity";
-import {System} from "../systems/System";
-import {removeFromArray} from "../Util";
 import {EntityListener} from "./EntityListener";
 
 export class EntityListenerCombiner extends EntityListener {
