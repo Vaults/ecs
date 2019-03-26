@@ -1,9 +1,10 @@
 # ECS test
+[![CircleCI](https://circleci.com/gh/Vaults/ecs.svg?style=shield)](https://circleci.com/gh/Vaults/ecs)
 
-How to run:
+## How to run
 
 ```npm install; npm start```
 
-How to test:
+## How to test
 
-```npm test test/**/*.test.ts```
+```npm install; npm test test/**/*.test.ts```
