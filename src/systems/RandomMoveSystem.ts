@@ -9,7 +9,7 @@ export class RandomMoveSystem extends System {
             const coords: CoordinateComponent = ent.getComponent(CoordinateComponent.name);
             const coordsConf = coords.getConfiguration();
 
-            const mod = () => Math.random() < 0.1 ? (Math.random() > 0.5 ? 1 : -1) : 0;
+            const mod = () => Math.random() < 0.15 ? (Math.random() > 0.5 ? 1 : -1) : 0;
 
             coordsConf.x += mod();
             coordsConf.y += mod();

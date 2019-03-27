@@ -17,13 +17,7 @@ export const getCoords = (e: Entity) => e.getComponent(CoordinateComponent.name)
 export type ProximityTuple = {neighbors: Entity[], root: Entity};
 
 export const getProximityTuples = (varr: Entity[], warr: Entity[], d: number): ProximityTuple[] => {
-    const dist = (v: Entity, w: Entity) => {
-        const a = getCoords(v);
-        const b = getCoords(w);
-        return Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
-    };
-
-    const tree: QuadTree = new QuadTree(new QuadTreeBoundary(new Coordinate(800, 800), 800), warr);
+    const tree: QuadTree = new QuadTree(new QuadTreeBoundary(new Coordinate(800, 800), 800), warr, Math.sqrt(warr.length));
 
     return varr.map(entV => {
         return {

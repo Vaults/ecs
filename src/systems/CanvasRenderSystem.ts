@@ -29,7 +29,7 @@ export class CanvasRenderSystem extends System {
             const coords: CoordinateComponent = ent.getComponent(CoordinateComponent.name);
             const conf = coords.getConfiguration();
             if (conf.x >= 0 && conf.y >= 0 && conf.x < CanvasRenderSystem.CELLS_X && conf.y < CanvasRenderSystem.CELLS_Y) {
-                renderMap[conf.y][conf.x] = ent.getComponent(RenderableComponent.name).getConfiguration().color;
+                renderMap[conf.y][conf.x] = ent.getComponent(RenderableComponent.name).getConfiguration().color.toString();
                 if (ent.hasComponent(OnFireComponent.name)) {
                     renderMap[conf.y][conf.x] = "red";
                 }

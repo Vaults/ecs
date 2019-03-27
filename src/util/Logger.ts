@@ -7,13 +7,13 @@ enum LogLevel {
 export class Logger {
 
     public static info(object: any) {
-        if ([LogLevel.Info].includes(Logger.LOG_LEVEL)) {
+        if ([LogLevel.Info, LogLevel.Debug].includes(Logger.LOG_LEVEL)) {
             console.log(object);
         }
     }
 
     public static debug(object: any) {
-        if ([LogLevel.Info, LogLevel.Debug].includes(Logger.LOG_LEVEL)) {
+        if ([LogLevel.Debug].includes(Logger.LOG_LEVEL)) {
             console.debug(object);
         }
     }
@@ -22,5 +22,5 @@ export class Logger {
         console.error(object);
     }
 
-    private static LOG_LEVEL = LogLevel.Info;
+    private static LOG_LEVEL = LogLevel.Debug;
 }

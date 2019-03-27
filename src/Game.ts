@@ -11,6 +11,7 @@ import {SystemRunner} from "./SystemRunner";
 import {CanvasRenderSystem} from "./systems/CanvasRenderSystem";
 import {DouseSystem} from "./systems/DouseSystem";
 import {IgniteSystem} from "./systems/IgniteSystem";
+import {ProximityColorIntensitySystem} from "./systems/ProximityColorIntensitySystem";
 import {RandomMoveSystem} from "./systems/RandomMoveSystem";
 
 const createEntity = (x: number, y: number) => {
@@ -18,9 +19,6 @@ const createEntity = (x: number, y: number) => {
     ent.addComponent(new FlammableComponent());
     const coordinateComponent = new CoordinateComponent();
     ent.addComponent(coordinateComponent);
-    if (Math.random() < 0.001) {
-        ent.addComponent(new OnFireComponent());
-    }
     coordinateComponent.getConfiguration().x = x;
     coordinateComponent.getConfiguration().y = y;
     ent.addComponent(new RenderableComponent());
@@ -35,12 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const douseSystem = new DouseSystem();
     const renderSystem = new CanvasRenderSystem();
     const moveSystem = new RandomMoveSystem();
+    const proximityColorSystem = new ProximityColorIntensitySystem();
 
     state.listeners = [
         new ChainedEntityListener(
             new EntityListenerCombiner([
                 new ChainedEntityListener(
-                    new SystemListener(renderSystem),
+                    new EntityListenerCombiner([
+                        new SystemListener(renderSystem),
+                        new SystemListener(proximityColorSystem),
+                    ]),
                     (e) => e.hasComponent(RenderableComponent.name),
                 ),
                 new SystemListener(moveSystem),
@@ -59,14 +61,16 @@ document.addEventListener("DOMContentLoaded", () => {
         ),
     ];
 
-    Array(1500)
+    const entities = Array(500)
         .fill("")
-        .map(() => createEntity(Math.floor(Math.random() * 400), Math.floor(Math.random() * 225)))
-        .forEach(entity => state.add(entity));
+        .map(() => createEntity(Math.floor(Math.random() * 400), Math.floor(Math.random() * 225)));
+    entities[0].addComponent(new OnFireComponent());
+    entities.forEach(entity => state.add(entity));
 
     systems.push(renderSystem);
     systems.push(douseSystem);
     systems.push(moveSystem);
+    systems.push(proximityColorSystem);
 
     setTimeout(() => {
         systems.push(igniteSystem);

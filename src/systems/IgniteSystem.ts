@@ -10,7 +10,7 @@ export class IgniteSystem extends System {
         const flammable = filterEntityListByComponent(this.entities, FlammableComponent.name);
         const onFire = filterEntityListByComponent(this.entities, OnFireComponent.name);
 
-        const toIgniteTuples = getProximityTuples(onFire, flammable, 3);
+        const toIgniteTuples = getProximityTuples(onFire, flammable, 8);
 
         toIgniteTuples.forEach(tuple => {
             tuple.neighbors.forEach(neighbor => {
